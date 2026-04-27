@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -7,14 +6,12 @@ import { ActivatedRoute } from '@angular/router';
 export class AuthService {
   private token: string | null = null;
 
-  constructor(private route: ActivatedRoute) {}
-
   handleCallback(): void {
-    this.route.queryParams.subscribe(params => {
-      if (params['token']) {
-        this.token = params['token'];
-      }
-    });
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+    if (token) {
+      this.token = token;
+    }
   }
 
   isLoggedIn(): boolean {

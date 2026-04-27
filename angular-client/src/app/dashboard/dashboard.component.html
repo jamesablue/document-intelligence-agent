@@ -1,1 +1,2 @@
-<p>dashboard works!</p>
+<input type="file" accept=".pdf,.docx" (change)="upload($event)" />
+<p *ngIf="status">{{ status }}</p>

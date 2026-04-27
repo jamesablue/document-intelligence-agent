@@ -7,8 +7,20 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  googleId  String   @unique
-  createdAt DateTime @default(now())
+  id        String     @id @default(cuid())
+  email     String     @unique
+  googleId  String     @unique
+  createdAt DateTime   @default(now())
+  documents Document[]
+}
+
+model Document {
+  id            String    @id @default(cuid())
+  userId        String
+  filename      String
+  s3Key         String
+  status        String    @default("pending")
+  extractedText String?
+  createdAt     DateTime  @default(now())
+  user          User      @relation(fields: [userId], references: [id])
 }
