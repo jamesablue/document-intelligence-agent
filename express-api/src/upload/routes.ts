@@ -5,6 +5,7 @@ import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { uploadToS3 } from './s3.js';
 import { requireAuth } from '../auth/middleware.js';
+import { extractText } from '../extraction/extractText.js';
 
 interface AuthenticatedRequest extends Request {
   user: { userId: string; email: string };
@@ -27,6 +28,13 @@ router.post('/upload', requireAuth, upload.single('file'), async (req, res) => {
       s3Key,
       status: 'pending',
     },
+  });
+
+  const extractedText = await extractText(file.buffer, file.originalname);
+
+  await prisma.document.update({
+    where: { id: document.id },
+    data: { extractedText, status: 'extracted' },
   });
 
   res.json({ documentId: document.id });
