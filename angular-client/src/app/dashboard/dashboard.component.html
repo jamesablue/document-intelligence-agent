@@ -1,2 +1,26 @@
-<input type="file" accept=".pdf,.docx" (change)="upload($event)" />
-<p *ngIf="status">{{ status }}</p>
+<div class="container">
+  <h2>Document Intelligence Agent</h2>
+  <p class="subtitle">Upload a PDF or DOCX to get started. Once processed, ask questions about its contents.</p>
+
+  <div class="card">
+    <h3>Upload Document</h3>
+    <label class="upload-label">
+      <input type="file" accept=".pdf,.docx" (change)="upload($event)" />
+      Choose file (.pdf or .docx)
+    </label>
+    <p *ngIf="uploadStatus" class="upload-status">{{ uploadStatus }}</p>
+  </div>
+
+  <div class="nav-cards">
+    <a routerLink="/documents" class="nav-card">
+      <span class="icon">📄</span>
+      <strong>My Documents</strong>
+      <span>View processing status and chunk counts</span>
+    </a>
+    <a routerLink="/chat" class="nav-card">
+      <span class="icon">💬</span>
+      <strong>Chat</strong>
+      <span>Ask questions across all your documents</span>
+    </a>
+  </div>
+</div>

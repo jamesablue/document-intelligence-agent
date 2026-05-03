@@ -1,9 +1,11 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
 }
 
 datasource db {
-  provider = "postgresql"
+  provider   = "postgresql"
+  extensions = [vector]
 }
 
 model User {
@@ -15,12 +17,32 @@ model User {
 }
 
 model Document {
-  id            String    @id @default(cuid())
+  id            String         @id @default(cuid())
   userId        String
   filename      String
   s3Key         String
-  status        String    @default("pending")
+  status        DocumentStatus @default(PENDING)
   extractedText String?
-  createdAt     DateTime  @default(now())
-  user          User      @relation(fields: [userId], references: [id])
+  createdAt     DateTime       @default(now())
+  user          User           @relation(fields: [userId], references: [id])
+  chunks        DocumentChunk[]
+}
+
+enum DocumentStatus {
+  PENDING
+  EXTRACTED
+  CHUNKING
+  CHUNKED
+  EMBEDDING
+  READY
+  ERROR
+}
+
+model DocumentChunk {
+  id         String                      @id @default(cuid())
+  documentId String
+  chunkIndex Int
+  content    String
+  embedding  Unsupported("vector(1024)")?
+  document   Document                    @relation(fields: [documentId], references: [id], onDelete: Cascade)
 }

@@ -1,0 +1,92 @@
+.container {
+  max-width: 700px;
+  margin: 3rem auto;
+  padding: 0 1rem;
+  font-family: sans-serif;
+}
+
+h2 {
+  font-size: 1.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.subtitle {
+  color: #6b7280;
+  margin-bottom: 2rem;
+}
+
+.card {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.card h3 {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+}
+
+.upload-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 0.55rem 1rem;
+  background: #1a56db;
+  color: white;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.upload-label input[type='file'] {
+  display: none;
+}
+
+.upload-label:hover {
+  background: #1e429f;
+}
+
+.upload-status {
+  margin: 0.75rem 0 0;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.nav-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.nav-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 1.25rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.15s;
+}
+
+.nav-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-color: #1a56db;
+}
+
+.nav-card .icon {
+  font-size: 1.5rem;
+}
+
+.nav-card strong {
+  font-size: 1rem;
+}
+
+.nav-card span:last-child {
+  font-size: 0.82rem;
+  color: #6b7280;
+}

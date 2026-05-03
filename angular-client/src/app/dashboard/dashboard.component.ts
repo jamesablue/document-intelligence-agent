@@ -1,16 +1,21 @@
 import { Component } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+  styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent {
-  status: string = '';
+  uploadStatus = '';
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   upload(event: Event): void {
     const file = (event.target as HTMLInputElement).files?.[0];
@@ -23,11 +28,14 @@ export class DashboardComponent {
       Authorization: `Bearer ${this.authService.getToken()}`,
     });
 
-    this.status = 'Uploading...';
+    this.uploadStatus = 'Uploading…';
 
     this.http.post('http://localhost:3000/upload', formData, { headers }).subscribe({
-      next: () => (this.status = 'Upload complete!'),
-      error: (err: HttpErrorResponse) => (this.status = `Upload failed. ${err.status} ${err.message}`),
+      next: () => {
+        this.uploadStatus = 'Upload complete — processing in background.';
+        this.router.navigate(['/documents']);
+      },
+      error: (err) => (this.uploadStatus = `Upload failed: ${err.status}`),
     });
   }
 }

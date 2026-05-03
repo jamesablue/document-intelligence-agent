@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="header">
+    <h2>My Documents</h2>
+    <button class="btn-primary" (click)="goToChat()">Chat with Documents</button>
+  </div>
+
+  <p *ngIf="error" class="error">{{ error }}</p>
+
+  <p *ngIf="documents.length === 0 && !error" class="empty">
+    No documents yet. Upload one from the dashboard.
+  </p>
+
+  <table *ngIf="documents.length > 0">
+    <thead>
+      <tr>
+        <th>Filename</th>
+        <th>Status</th>
+        <th>Chunks</th>
+        <th>Uploaded</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let doc of documents">
+        <td class="filename">{{ doc.filename }}</td>
+        <td>
+          <span class="status-badge" [ngClass]="statusClass(doc.status)">
+            {{ statusLabel(doc.status) }}
+          </span>
+        </td>
+        <td>{{ doc._count.chunks }}</td>
+        <td>{{ doc.createdAt | date: 'medium' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
