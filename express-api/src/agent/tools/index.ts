@@ -1,8 +1,9 @@
 import type { Tool, ContentBlock } from '@aws-sdk/client-bedrock-runtime';
 import type { AgentTool, ToolContext } from './types.js';
-import { pingTool } from './ping.js';
+import { searchDocumentsTool } from './searchDocuments.js';
+import { summarizeDocumentTool } from './summarizeDocument.js';
 
-const tools: AgentTool[] = [pingTool];
+const tools: AgentTool[] = [searchDocumentsTool, summarizeDocumentTool];
 
 export function getToolSpecs(): Tool[] {
   return tools.map((t) => t.spec);

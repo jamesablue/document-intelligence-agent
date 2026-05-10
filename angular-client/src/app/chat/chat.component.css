@@ -103,6 +103,34 @@ h2 {
   font-style: italic;
 }
 
+.tool-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 0.5rem;
+}
+
+.tool-step {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  color: #6b7280;
+}
+
+.tool-name {
+  font-weight: 600;
+  color: #1a56db;
+  white-space: nowrap;
+}
+
+.tool-input {
+  color: #9ca3af;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .error {
   color: #b91c1c;
   font-size: 0.88rem;

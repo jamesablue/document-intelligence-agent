@@ -9,6 +9,8 @@ const MODEL_ID = 'us.anthropic.claude-sonnet-4-6';
 const SYSTEM_PROMPT =
   'You are a helpful document intelligence assistant. You have access to tools that let you search and analyze the user\'s documents. Use them when needed to answer questions accurately. If no tools are needed, respond directly.';
 
+const MAX_TURNS = 10;
+
 export interface AgentResult {
   answer: string;
   toolCalls: Array<{ tool: string; input: Record<string, unknown> }>;
@@ -17,8 +19,10 @@ export interface AgentResult {
 export async function runAgent(query: string, ctx: ToolContext): Promise<AgentResult> {
   const messages: Message[] = [{ role: 'user', content: [{ text: query }] }];
   const toolCalls: AgentResult['toolCalls'] = [];
+  let turns = 0;
 
-  while (true) {
+  while (turns < MAX_TURNS) {
+    turns++;
     const response = await bedrock.send(
       new ConverseCommand({
         modelId: MODEL_ID,
@@ -63,4 +67,6 @@ export async function runAgent(query: string, ctx: ToolContext): Promise<AgentRe
 
     messages.push({ role: 'user', content: toolResultBlocks });
   }
+
+  return { answer: 'Maximum tool call limit reached without a final answer.', toolCalls };
 }

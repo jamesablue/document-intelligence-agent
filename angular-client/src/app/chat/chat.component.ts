@@ -2,9 +2,15 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { DocumentService } from '../document.service';
 
+interface ToolCall {
+  tool: string;
+  input: Record<string, unknown>;
+}
+
 interface Message {
   role: 'user' | 'assistant';
   text: string;
+  toolCalls?: ToolCall[];
 }
 
 @Component({
@@ -31,7 +37,11 @@ export class ChatComponent {
 
     this.documentService.chat(userText).subscribe({
       next: (res) => {
-        this.messages.push({ role: 'assistant', text: res.answer });
+        this.messages.push({
+          role: 'assistant',
+          text: res.answer,
+          toolCalls: res.toolCalls?.length ? res.toolCalls : undefined,
+        });
         this.loading = false;
       },
       error: () => {
@@ -39,6 +49,12 @@ export class ChatComponent {
         this.loading = false;
       },
     });
+  }
+
+  formatToolInput(input: Record<string, unknown>): string {
+    return Object.entries(input)
+      .map(([k, v]) => `${k}: ${String(v)}`)
+      .join(', ');
   }
 
   goBack(): void {

@@ -11,6 +11,14 @@
 
     <div *ngFor="let msg of messages" class="message" [ngClass]="msg.role">
       <span class="role-label">{{ msg.role === 'user' ? 'You' : 'Assistant' }}</span>
+
+      <div *ngIf="msg.toolCalls && msg.toolCalls.length" class="tool-steps">
+        <div *ngFor="let tc of msg.toolCalls" class="tool-step">
+          <span class="tool-name">{{ tc.tool }}</span>
+          <span class="tool-input">{{ formatToolInput(tc.input) }}</span>
+        </div>
+      </div>
+
       <p class="text">{{ msg.text }}</p>
     </div>
 

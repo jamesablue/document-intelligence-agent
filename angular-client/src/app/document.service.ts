@@ -13,12 +13,7 @@ export interface DocumentSummary {
 
 export interface ChatResponse {
   answer: string;
-  sources: Array<{
-    chunkId: string;
-    documentId: string;
-    content: string;
-    similarity: number;
-  }>;
+  toolCalls: Array<{ tool: string; input: Record<string, unknown> }>;
 }
 
 @Injectable({ providedIn: 'root' })
