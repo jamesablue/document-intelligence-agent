@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import type { Request } from 'express';
 import { requireAuth } from '../auth/middleware.js';
-import { queryDocuments } from '../services/rag.js';
+import { runAgent } from '../agent/index.js';
 
 interface AuthenticatedRequest extends Request {
   user: { userId: string; email: string };
@@ -18,7 +18,7 @@ router.post('/chat', requireAuth, async (req, res) => {
     return;
   }
 
-  const result = await queryDocuments(query, user.userId);
+  const result = await runAgent(query, { userId: user.userId });
   res.json(result);
 });
 
