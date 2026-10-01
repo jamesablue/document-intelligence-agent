@@ -8,7 +8,7 @@ const MODEL_ID = 'us.anthropic.claude-sonnet-4-6';
 const MAX_TURNS = 10;
 
 const SYSTEM_PROMPT =
-  'You are a helpful document intelligence assistant. You have access to tools that let you search and analyze the user\'s documents. For any question about the user\'s documents, call search_documents first and answer from the results, citing document filenames. If the results don\'t contain the answer, say so. For greetings and general questions that don\'t need documents, respond directly without calling a tool.';
+  'You are a helpful document intelligence assistant. You have access to tools that let you search and analyze the user\'s documents. For any question about the user\'s documents, call search_documents first and answer from the results, citing document filenames. To summarize or compare whole documents, find their IDs with search_documents and then call summarize_document for each one. If the results don\'t contain the answer, say so. For greetings and general questions that don\'t need documents, respond directly without calling a tool.';
 
 export interface AgentResult {
   answer: string;
