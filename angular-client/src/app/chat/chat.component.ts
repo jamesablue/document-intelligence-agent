@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { DocumentService } from '../document.service';
+import { DocumentService, ToolCall } from '../document.service';
 
 interface Message {
   role: 'user' | 'assistant';
   text: string;
+  toolCalls?: ToolCall[];
 }
 
 @Component({
@@ -31,7 +32,7 @@ export class ChatComponent {
 
     this.documentService.chat(userText).subscribe({
       next: (res) => {
-        this.messages.push({ role: 'assistant', text: res.answer });
+        this.messages.push({ role: 'assistant', text: res.answer, toolCalls: res.toolCalls });
         this.loading = false;
       },
       error: () => {

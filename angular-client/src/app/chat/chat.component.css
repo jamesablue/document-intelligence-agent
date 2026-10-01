@@ -98,6 +98,39 @@ h2 {
   border-bottom-left-radius: 4px;
 }
 
+.steps {
+  margin-top: 0.35rem;
+  font-size: 0.8rem;
+  color: #4b5563;
+  max-width: 100%;
+}
+
+.steps summary {
+  cursor: pointer;
+  user-select: none;
+}
+
+.steps ol {
+  margin: 0.4rem 0 0;
+  padding-left: 1.25rem;
+}
+
+.tool-name {
+  font-family: monospace;
+  font-weight: 600;
+}
+
+.tool-input {
+  margin: 0.2rem 0 0.5rem;
+  padding: 0.4rem 0.6rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
 .thinking .text {
   color: #9ca3af;
   font-style: italic;

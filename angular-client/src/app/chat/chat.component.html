@@ -12,6 +12,17 @@
     <div *ngFor="let msg of messages" class="message" [ngClass]="msg.role">
       <span class="role-label">{{ msg.role === 'user' ? 'You' : 'Assistant' }}</span>
       <p class="text">{{ msg.text }}</p>
+      <details *ngIf="msg.toolCalls?.length" class="steps">
+        <summary>
+          {{ msg.toolCalls!.length }} thinking step{{ msg.toolCalls!.length === 1 ? '' : 's' }}
+        </summary>
+        <ol>
+          <li *ngFor="let call of msg.toolCalls">
+            <span class="tool-name">{{ call.tool }}</span>
+            <pre class="tool-input">{{ call.input | json }}</pre>
+          </li>
+        </ol>
+      </details>
     </div>
 
     <div *ngIf="loading" class="message assistant thinking">
