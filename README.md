@@ -2,6 +2,23 @@
 
 A full-stack monorepo for uploading and interacting with government documents via an AI agent.
 
+## Current Status
+
+_Last updated: 2026-10-01_
+
+**Working:** Google sign-in, upload to S3, PDF/DOCX text extraction, background chunking and embedding (Titan to pgvector), documents list with live status, and an agent loop on Bedrock Converse.
+
+**Known broken:** Chat can't answer document questions. `POST /chat` runs the agent loop, but the only tool registered is a test `ping` tool. Fixed by [#2](https://github.com/jamesablue/document-intelligence-agent/issues/2).
+
+**Next up** ([Week 3: Agent tools](https://github.com/jamesablue/document-intelligence-agent/milestone/1)):
+1. [#2](https://github.com/jamesablue/document-intelligence-agent/issues/2) `search_documents` tool and `MAX_TURNS` limit
+2. [#3](https://github.com/jamesablue/document-intelligence-agent/issues/3) `summarize_document` tool
+3. [#4](https://github.com/jamesablue/document-intelligence-agent/issues/4) Show agent tool calls in the chat UI
+
+**Backlog:** [type errors, tests, auth persistence, conversation memory, streaming, and API docs](https://github.com/jamesablue/document-intelligence-agent/milestone/2).
+
+Design notes and decisions live in [`_dev-notes/`](_dev-notes/). Update this section at the end of each work session.
+
 ## Stack
 
 | Layer | Technology |

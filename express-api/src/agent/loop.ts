@@ -5,9 +5,10 @@ import type { ToolContext } from './tools/types.js';
 
 const bedrock = new BedrockRuntimeClient({ region: process.env['AWS_REGION'] ?? 'us-east-1' });
 const MODEL_ID = 'us.anthropic.claude-sonnet-4-6';
+const MAX_TURNS = 10;
 
 const SYSTEM_PROMPT =
-  'You are a helpful document intelligence assistant. You have access to tools that let you search and analyze the user\'s documents. Use them when needed to answer questions accurately. If no tools are needed, respond directly.';
+  'You are a helpful document intelligence assistant. You have access to tools that let you search and analyze the user\'s documents. For any question about the user\'s documents, call search_documents first and answer from the results, citing document filenames. If the results don\'t contain the answer, say so. For greetings and general questions that don\'t need documents, respond directly without calling a tool.';
 
 export interface AgentResult {
   answer: string;
@@ -18,7 +19,7 @@ export async function runAgent(query: string, ctx: ToolContext): Promise<AgentRe
   const messages: Message[] = [{ role: 'user', content: [{ text: query }] }];
   const toolCalls: AgentResult['toolCalls'] = [];
 
-  while (true) {
+  for (let turn = 0; turn < MAX_TURNS; turn++) {
     const response = await bedrock.send(
       new ConverseCommand({
         modelId: MODEL_ID,
@@ -63,4 +64,10 @@ export async function runAgent(query: string, ctx: ToolContext): Promise<AgentRe
 
     messages.push({ role: 'user', content: toolResultBlocks });
   }
+
+  return {
+    answer:
+      'I wasn\'t able to finish answering within the allowed number of steps. Please try rephrasing or narrowing your question.',
+    toolCalls,
+  };
 }
