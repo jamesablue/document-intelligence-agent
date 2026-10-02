@@ -11,14 +11,14 @@ export interface DocumentSummary {
   _count: { chunks: number };
 }
 
+export interface ToolCall {
+  tool: string;
+  input: Record<string, unknown>;
+}
+
 export interface ChatResponse {
   answer: string;
-  sources: Array<{
-    chunkId: string;
-    documentId: string;
-    content: string;
-    similarity: number;
-  }>;
+  toolCalls: ToolCall[];
 }
 
 @Injectable({ providedIn: 'root' })
