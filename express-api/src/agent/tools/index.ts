@@ -1,4 +1,4 @@
-import type { Tool, ContentBlock } from '@aws-sdk/client-bedrock-runtime';
+import type { Tool, ToolResultContentBlock } from '@aws-sdk/client-bedrock-runtime';
 import type { AgentTool, ToolContext } from './types.js';
 import { pingTool } from './ping.js';
 import { searchDocumentsTool } from './searchDocuments.js';
@@ -14,7 +14,7 @@ export async function executeTool(
   name: string,
   input: Record<string, unknown>,
   ctx: ToolContext
-): Promise<ContentBlock[]> {
+): Promise<ToolResultContentBlock[]> {
   const tool = tools.find((t) => t.spec.toolSpec!.name === name);
   if (!tool) throw new Error(`Unknown tool: ${name}`);
   return tool.execute(input, ctx);

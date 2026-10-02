@@ -1,5 +1,9 @@
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 
+if (!process.env['AWS_REGION']) {
+  throw new Error("AWS_REGION environment variable is not set");
+}
+
 const s3 = new S3Client({
   region: process.env['AWS_REGION'],
   credentials: {
