@@ -9,7 +9,7 @@ const PROCESSING_STATUSES = new Set(['PENDING', 'EXTRACTED', 'CHUNKED', 'EMBEDDE
 @Component({
   selector: 'app-documents',
   templateUrl: './documents.component.html',
-  styleUrl: './documents.component.css',
+  styleUrl: './documents.component.scss',
 })
 export class DocumentsComponent implements OnInit, OnDestroy {
   documents: DocumentSummary[] = [];
