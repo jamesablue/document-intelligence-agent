@@ -178,6 +178,38 @@ DATABASE_URL="postgresql://postgres:postgres@localhost:5432/docagent"
 
 ## API Endpoints
 
-| Method | Path | Description |
-|---|---|---|
-| GET | /health | Returns `{"status":"ok"}` — confirms the server is up |
+Routes marked **Bearer** require an `Authorization: Bearer <token>` header, where the token is the JWT issued by the Google sign-in flow (valid for 7 days). A missing or invalid token returns `401 {"error": "Missing token"}` or `401 {"error": "Invalid token"}`. All data is scoped to the user in the token.
+
+| Method | Path | Auth | Request | Response |
+|---|---|---|---|---|
+| GET | `/health` | none | — | `{"status":"ok"}` |
+| GET | `/auth/google` | none | — | Redirects to Google's consent screen |
+| GET | `/auth/google/callback` | none | Google's redirect | Redirects to `<client>/auth/callback?token=<JWT>`, or to `<client>/login?error=auth_failed` on failure |
+| POST | `/upload` | Bearer | `multipart/form-data` with a `file` field (`.pdf` or `.docx`) | `{"documentId": "<id>"}`. Chunking and embedding continue in the background. |
+| GET | `/documents` | Bearer | — | `[{id, filename, status, createdAt, _count: {chunks}}]`, newest first |
+| GET | `/documents/:id` | Bearer | — | `{id, filename, status, createdAt, chunks: [{id, chunkIndex, content}]}`, or `404 {"error": "Document not found"}` |
+| POST | `/chat` | Bearer | `{"query": "<question>"}` | `{"answer": "<text>", "toolCalls": [{"tool": "<name>", "input": {...}}]}`, or `400 {"error": "query is required"}` |
+
+**Document status** moves through `PENDING → EXTRACTED → CHUNKING → CHUNKED → EMBEDDING → READY`, or ends in `ERROR`. `summarize_document` only works on `READY` documents, and search only returns chunks that have been embedded.
+
+---
+
+## Agent Architecture
+
+`POST /chat` hands the query to `runAgent()` (`express-api/src/agent/loop.ts`), which runs a tool-use loop on the AWS Bedrock Converse API (Claude Sonnet):
+
+1. Send the conversation and the registered tool specs to the model.
+2. If the model asks to call tools, run each one, append the results to the conversation, and go back to step 1.
+3. Otherwise return the model's text as `answer`, along with every tool call it made as `toolCalls`.
+
+The loop stops after `MAX_TURNS` (10) model calls and returns a fallback message. A tool that throws returns its error to the model as an error result instead of failing the request. Each request starts fresh, with no conversation memory yet.
+
+| Tool | What it does |
+|---|---|
+| `search_documents` | Semantic search: embeds the query with Titan, runs a pgvector cosine search over the user's chunks, and returns up to 10 chunks (default 5) with document ID, filename, and similarity |
+| `summarize_document` | Returns one document's full text (truncated to about 8000 characters) for summarizing or comparing; takes a document ID from `search_documents` |
+| `ping` | Test tool used to prove the loop works |
+
+Every tool receives `{ userId }` from the JWT and must scope its queries to it. To add a tool, implement the `AgentTool` interface (`agent/tools/types.ts`), put it in `agent/tools/`, and register it in `agent/tools/index.ts`.
+
+For the design rationale (why Bedrock Converse rather than the Anthropic SDK, and the build order), see [`_dev-notes/week-03-agent-loop.md`](_dev-notes/week-03-agent-loop.md).
