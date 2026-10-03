@@ -9,6 +9,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { AuthCallbackComponent } from './auth-callback/auth-callback.component';
 import { DocumentsComponent } from './documents/documents.component';
 import { ChatComponent } from './chat/chat.component';
+import { MarkdownPipe } from './markdown.pipe';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { ChatComponent } from './chat/chat.component';
     AuthCallbackComponent,
     DocumentsComponent,
     ChatComponent,
+    MarkdownPipe,
   ],
   imports: [
     BrowserModule,
