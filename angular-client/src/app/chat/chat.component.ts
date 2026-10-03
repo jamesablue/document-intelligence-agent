@@ -11,7 +11,7 @@ interface Message {
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
-  styleUrl: './chat.component.css',
+  styleUrl: './chat.component.scss',
 })
 export class ChatComponent {
   query = '';

@@ -1,0 +1,22 @@
+@use 'variables' as *;
+
+@mixin page-container($max-width, $margin-top: 2rem) {
+  max-width: $max-width;
+  margin: $margin-top auto;
+  padding: 0 1rem;
+  font-family: $font-sans;
+}
+
+@mixin btn-primary($padding) {
+  padding: $padding;
+  background: $blue-600;
+  color: white;
+  border: none;
+  border-radius: $radius-sm;
+  cursor: pointer;
+  font-size: 0.9rem;
+
+  &:hover:not(:disabled) {
+    background: $blue-800;
+  }
+}
