@@ -4,6 +4,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Running the app
 
+Node 24 is pinned in `.nvmrc` (run `nvm use`). Angular 18 runs on it but prints an "unsupported Node" warning until the client is upgraded to Angular 20+. npm 11 (bundled with Node 24) skips package install scripts by default; Prisma still works because it downloads its schema engine on first use.
+
 Three services run independently — start each in its own terminal:
 
 ```bash

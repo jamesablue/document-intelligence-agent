@@ -45,7 +45,7 @@ document-intelligence-agent/
 
 ## Prerequisites
 
-- Node.js 18+
+- Node.js 24 (pinned in [`.nvmrc`](.nvmrc); run `nvm use` from the repo root)
 - Docker Desktop (running)
 - Angular CLI: `npm install -g @angular/cli`
 
