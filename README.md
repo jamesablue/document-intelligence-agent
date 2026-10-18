@@ -4,18 +4,16 @@ A full-stack monorepo for uploading and interacting with government documents vi
 
 ## Current Status
 
-_Last updated: 2026-10-01_
+_Last updated: 2026-10-18_
 
-**Working:** Google sign-in, upload to S3, PDF/DOCX text extraction, background chunking and embedding (Titan to pgvector), documents list with live status, and an agent loop on Bedrock Converse.
+**Working:** Google sign-in, upload to S3, PDF/DOCX text extraction, background chunking and embedding (Titan to pgvector), documents list with live status, and a tool-calling agent on Bedrock Converse (`search_documents`, `summarize_document`) whose tool calls and markdown answers show in the chat UI. Backend unit tests run offline with `npm test` in `express-api/`.
 
-**Known broken:** Chat can't answer document questions. `POST /chat` runs the agent loop, but the only tool registered is a test `ping` tool. Fixed by [#2](https://github.com/jamesablue/document-intelligence-agent/issues/2).
+**Next up:**
+1. [#17](https://github.com/jamesablue/document-intelligence-agent/issues/17) GitHub Actions CI for typecheck, tests and build
+2. [#16](https://github.com/jamesablue/document-intelligence-agent/issues/16) DB integration tests with real pgvector, including per-user scoping
+3. [Opportunity discovery](https://github.com/jamesablue/document-intelligence-agent/milestone/3) milestone
 
-**Next up** ([Week 3: Agent tools](https://github.com/jamesablue/document-intelligence-agent/milestone/1)):
-1. [#2](https://github.com/jamesablue/document-intelligence-agent/issues/2) `search_documents` tool and `MAX_TURNS` limit
-2. [#3](https://github.com/jamesablue/document-intelligence-agent/issues/3) `summarize_document` tool
-3. [#4](https://github.com/jamesablue/document-intelligence-agent/issues/4) Show agent tool calls in the chat UI
-
-**Backlog:** [type errors, tests, auth persistence, conversation memory, streaming, and API docs](https://github.com/jamesablue/document-intelligence-agent/milestone/2).
+**Backlog:** [auth persistence, conversation memory and streaming](https://github.com/jamesablue/document-intelligence-agent/milestone/2), plus more test coverage in [#18](https://github.com/jamesablue/document-intelligence-agent/issues/18)–[#20](https://github.com/jamesablue/document-intelligence-agent/issues/20).
 
 Design notes and decisions live in [`_dev-notes/`](_dev-notes/). Update this section at the end of each work session.
 
@@ -47,7 +45,7 @@ document-intelligence-agent/
 
 ## Prerequisites
 
-- Node.js 18+
+- Node.js 24 (pinned in [`.nvmrc`](.nvmrc); run `nvm use` from the repo root)
 - Docker Desktop (running)
 - Angular CLI: `npm install -g @angular/cli`
 
@@ -119,6 +117,13 @@ Expected: `{"status":"ok"}`
 ### Frontend is running
 
 Open **http://localhost:4200** in a browser. Expected: default Angular welcome page.
+
+### Backend tests pass
+```bash
+cd express-api
+npm test
+```
+Expected: all Vitest suites pass. They need no database, network or AWS credentials (Bedrock is mocked with `aws-sdk-client-mock`). Use `npm run test:watch` while developing.
 
 ---
 

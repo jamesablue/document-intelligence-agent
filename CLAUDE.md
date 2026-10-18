@@ -4,6 +4,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Running the app
 
+Node 24 is pinned in `.nvmrc` (run `nvm use`). Angular 18 runs on it but prints an "unsupported Node" warning until the client is upgraded to Angular 20+. npm 11 (bundled with Node 24) skips package install scripts by default; Prisma still works because it downloads its schema engine on first use.
+
 Three services run independently — start each in its own terminal:
 
 ```bash
@@ -36,9 +38,16 @@ npx prisma generate
 
 # Prisma: open database browser
 npx prisma studio
+
+# Tests (Vitest)
+npm test               # run once
+npm run test:watch     # watch mode
+
+# Typecheck
+npm run typecheck
 ```
 
-There are no tests yet (`npm test` exits with an error).
+Tests live next to the code as `src/**/*.test.ts` and need no database, network or AWS credentials. `vitest.config.ts` sets dummy env vars (modules like `upload/s3.ts` and `auth/passport.ts` read env at import time). Bedrock is mocked with `aws-sdk-client-mock` (`mockClient(BedrockRuntimeClient)` covers module-level clients). `src/app.ts` exports the configured Express app without listening; `src/index.ts` loads dotenv and calls `listen`.
 
 ## Frontend dev commands
 
