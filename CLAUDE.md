@@ -36,9 +36,16 @@ npx prisma generate
 
 # Prisma: open database browser
 npx prisma studio
+
+# Tests (Vitest)
+npm test               # run once
+npm run test:watch     # watch mode
+
+# Typecheck
+npm run typecheck
 ```
 
-There are no tests yet (`npm test` exits with an error).
+Tests live next to the code as `src/**/*.test.ts` and need no database, network or AWS credentials. `vitest.config.ts` sets dummy env vars (modules like `upload/s3.ts` and `auth/passport.ts` read env at import time). Bedrock is mocked with `aws-sdk-client-mock` (`mockClient(BedrockRuntimeClient)` covers module-level clients). `src/app.ts` exports the configured Express app without listening; `src/index.ts` loads dotenv and calls `listen`.
 
 ## Frontend dev commands
 
